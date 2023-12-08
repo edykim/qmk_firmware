@@ -533,7 +533,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
 
         case MAC_TASK:
-            if (record->event.pressed) {
+            if (record->event.pressed && get_mods() == MOD_BIT(KC_LGUI)) {
+                unregister_code(KC_LGUI);
+                register_code(KC_F11);
+                wait_ms(50);
+                unregister_code(KC_F11);
+                register_code(KC_LGUI);
+            } else if (record->event.pressed) {
                 host_consumer_send(0x029F);
             } else {
                 host_consumer_send(0);
