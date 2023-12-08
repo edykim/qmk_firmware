@@ -551,6 +551,26 @@ void rf_led_show(void) {
     set_left_rgb(r_temp, g_temp, b_temp);
 }
 
+void bat_percent_keyled(uint8_t bat_percent) {
+    uint8_t k = bat_percent / 10;
+    uint8_t i = 0;
+
+    for (;i < k; i++) {
+        rgb_matrix_set_color(29 - i, 128 - i * 10, 128, 128);
+    }
+
+    for (;i < 10; i++) {
+        rgb_matrix_set_color(29 - i, 0, 0, 0);
+    }
+}
+
+void bat_percent_keyled_off(void) {
+    uint8_t i = 0;
+    for (;i < 10; i++) {
+        rgb_matrix_set_color(29 - i, 0, 0, 0);
+    }
+}
+
 /**
  * @brief  bat_num_led.
  */
@@ -604,33 +624,35 @@ void bat_led_close(void)
  * @brief  bat_percent_led.
  */
 void bat_percent_led(uint8_t bat_percent) {
+    uint8_t bat_full_end_led = -1;
     uint8_t bat_end_led = 0;
     uint8_t bat_r, bat_g, bat_b;
+    uint8_t bat_full_r, bat_full_g, bat_full_b;
+    bat_r = 0, bat_g = 0x80, bat_b = 0x80;
+    bat_full_r = 0, bat_full_g = 0x80, bat_full_b = 0;
 
     if (bat_percent <= 15) {
         bat_end_led = 0;
         bat_r = 0x80, bat_g = 0, bat_b = 0;
     } else if (bat_percent <= 20) {
         bat_end_led = 1;
-        bat_r = 0x80, bat_g = 0x40, bat_b = 0;
     } else if (bat_percent <= 40) {
         bat_end_led = 2;
-        bat_r = 0x80, bat_g = 0x40, bat_b = 0;
     } else if (bat_percent <= 60) {
         bat_end_led = 3;
-        bat_r = 0x80, bat_g = 0x40, bat_b = 0;
     } else if (bat_percent <= 80) {
         bat_end_led = 4;
-        bat_r = 0x80, bat_g = 0x40, bat_b = 0;
     } else if (bat_percent <= 95) {
         bat_end_led = 5;
-        bat_r = 0x80, bat_g = 0x40, bat_b = 0;
     } else {
         bat_end_led = 5;
-        bat_r = 0, bat_g = 0x80, bat_b = 0;
+        bat_full_end_led = 0;
     }
 
     uint8_t i = 0;
+    for (; i <= bat_full_end_led; i++)
+        side_rgb_set_color(11 - i, bat_full_r >> 2, bat_full_g >> 2, bat_full_b >> 2);
+
     for (; i <= bat_end_led; i++)
         side_rgb_set_color(11 - i, bat_r >> 2, bat_g >> 2, bat_b >> 2);
 
@@ -707,8 +729,10 @@ void bat_led_show(void) {
             b_temp = 0x00;
             count_rgb_light(breathe_data_tab[play_point]);
             set_right_rgb(r_temp, g_temp, b_temp);
+            bat_percent_keyled_off();
         } else {
             bat_percent_led(bat_percent);
+            bat_percent_keyled(bat_percent);
         }
     }
 }
