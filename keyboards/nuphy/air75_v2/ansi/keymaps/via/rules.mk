@@ -1,4 +1,3 @@
 VIA_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 NKRO_ENABLE = yes
-
