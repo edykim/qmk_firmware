@@ -564,13 +564,6 @@ void bat_percent_keyled(uint8_t bat_percent) {
     }
 }
 
-void bat_percent_keyled_off(void) {
-    uint8_t i = 0;
-    for (;i < 10; i++) {
-        rgb_matrix_set_color(29 - i, 0, 0, 0);
-    }
-}
-
 /**
  * @brief  bat_num_led.
  */
@@ -729,7 +722,6 @@ void bat_led_show(void) {
             b_temp = 0x00;
             count_rgb_light(breathe_data_tab[play_point]);
             set_right_rgb(r_temp, g_temp, b_temp);
-            bat_percent_keyled_off();
         } else {
             bat_percent_led(bat_percent);
             bat_percent_keyled(bat_percent);
