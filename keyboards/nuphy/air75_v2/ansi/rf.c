@@ -644,3 +644,19 @@ void rf_device_init(void) {
 
     uart_send_cmd(CMD_SET_NAME, 10, 20);
 }
+
+void host_keyboard_send_user(report_keyboard_t *report) {
+    uart_send_report_func();
+}
+
+void host_mouse_send_user(report_mouse_t *report) {
+    uart_send_mouse_report();
+}
+
+void host_system_send_user(uint16_t usage) {
+    uart_send_system_report();
+}
+
+void host_consumer_send_user(uint16_t usage) {
+    uart_send_consumer_report();
+}
