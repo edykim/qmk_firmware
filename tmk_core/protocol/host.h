@@ -44,6 +44,12 @@ void    host_system_send(uint16_t usage);
 void    host_consumer_send(uint16_t usage);
 void    host_programmable_button_send(uint32_t data);
 
+void    host_keyboard_send_user(report_keyboard_t *report);
+void    host_nkro_send_user(report_nkro_t *report);
+void    host_mouse_send_user(report_mouse_t *report);
+void    host_system_send_user(uint16_t usage);
+void    host_consumer_send_user(uint16_t usage);
+
 uint16_t host_last_system_usage(void);
 uint16_t host_last_consumer_usage(void);
 

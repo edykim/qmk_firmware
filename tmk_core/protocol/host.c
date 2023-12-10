@@ -73,6 +73,7 @@ led_t host_keyboard_led_state(void) {
 
 /* send report */
 void host_keyboard_send(report_keyboard_t *report) {
+    host_keyboard_send_user(report);
 #ifdef BLUETOOTH_ENABLE
     if (where_to_send() == OUTPUT_BLUETOOTH) {
         bluetooth_send_keyboard(report);
@@ -96,6 +97,7 @@ void host_keyboard_send(report_keyboard_t *report) {
 }
 
 void host_nkro_send(report_nkro_t *report) {
+    host_nkro_send_user(report);
     if (!driver) return;
     report->report_id = REPORT_ID_NKRO;
     (*driver->send_nkro)(report);
@@ -110,6 +112,9 @@ void host_nkro_send(report_nkro_t *report) {
 }
 
 void host_mouse_send(report_mouse_t *report) {
+
+    host_mouse_send_user(report);
+
 #ifdef BLUETOOTH_ENABLE
     if (where_to_send() == OUTPUT_BLUETOOTH) {
         bluetooth_send_mouse(report);
@@ -133,6 +138,8 @@ void host_system_send(uint16_t usage) {
     if (usage == last_system_usage) return;
     last_system_usage = usage;
 
+    host_system_send_user(usage);
+
     if (!driver) return;
 
     report_extra_t report = {
@@ -145,6 +152,8 @@ void host_system_send(uint16_t usage) {
 void host_consumer_send(uint16_t usage) {
     if (usage == last_consumer_usage) return;
     last_consumer_usage = usage;
+
+    host_consumer_send_user(usage);
 
 #ifdef BLUETOOTH_ENABLE
     if (where_to_send() == OUTPUT_BLUETOOTH) {
@@ -256,3 +265,9 @@ uint16_t host_last_system_usage(void) {
 uint16_t host_last_consumer_usage(void) {
     return last_consumer_usage;
 }
+
+__attribute__((weak)) void host_keyboard_send_user(report_keyboard_t *report) {}
+__attribute__((weak)) void host_nkro_send_user(report_nkro_t *report) {}
+__attribute__((weak)) void host_mouse_send_user(report_mouse_t *report) {}
+__attribute__((weak)) void host_system_send_user(uint16_t usage) {}
+__attribute__((weak)) void host_consumer_send_user(uint16_t usage) {}
