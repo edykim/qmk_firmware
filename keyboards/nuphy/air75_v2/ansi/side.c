@@ -552,8 +552,14 @@ void rf_led_show(void) {
 }
 
 void bat_percent_keyled(uint8_t bat_percent) {
-    uint8_t k = bat_percent / 10;
+    uint8_t k = 0;
     uint8_t i = 0;
+
+    if (bat_percent >= 100) {
+        k = 10;
+    } else if (bat_percent >= 0) {
+        k = bat_percent / 10;
+    }
 
     for (;i < k; i++) {
         rgb_matrix_set_color(29 - i, 128 - i * 10, 128, 128);
