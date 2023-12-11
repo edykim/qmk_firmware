@@ -551,25 +551,6 @@ void rf_led_show(void) {
     set_left_rgb(r_temp, g_temp, b_temp);
 }
 
-void bat_percent_keyled(uint8_t bat_percent) {
-    uint8_t k = 0;
-    uint8_t i = 0;
-
-    if (bat_percent >= 100) {
-        k = 10;
-    } else if (bat_percent >= 0) {
-        k = bat_percent / 10;
-    }
-
-    for (;i < k; i++) {
-        rgb_matrix_set_color(29 - i, 128 - i * 10, 128, 128);
-    }
-
-    for (;i < 10; i++) {
-        rgb_matrix_set_color(29 - i, 0, 0, 0);
-    }
-}
-
 /**
  * @brief  bat_num_led.
  */
@@ -730,7 +711,6 @@ void bat_led_show(void) {
             set_right_rgb(r_temp, g_temp, b_temp);
         } else {
             bat_percent_led(bat_percent);
-            bat_percent_keyled(bat_percent);
         }
     }
 }
